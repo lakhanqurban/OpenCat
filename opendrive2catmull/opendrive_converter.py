@@ -196,6 +196,8 @@ def save_road_data(opendrive_file, output_file):
 
     # Ensure JSON compatibility for numpy arrays
     points_serializable = [point.tolist() if isinstance(point, np.ndarray) else point for point in spline_points]
+    # Use the line below to filter only x and y values from the spline points. 
+    # points_serializable = [ [point[0], point[1]] for point in spline_points]
 
     # Create the output directory if it doesn't exist
     output_dir = os.path.dirname(output_file)
@@ -236,6 +238,9 @@ if __name__ == "__main__":
             original_points = original_points[1:]  # Adjusting to plot without the first point if needed
             plt.figure()  # Create a new figure for each plot
             plot_spline_with_lanes(spline_points, original_points, spline_color='yellow', points_color='red')
+            # Save the plot to the plot directory with a unique filename
+            plot_filename = os.path.join(plot_dir, f"road_{i}.png")
+            plt.savefig(plot_filename)
             plt.close()
         else:
             logger.error("Failed to generate spline data.")
